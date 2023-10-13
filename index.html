@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>RxJS briefly</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="node_modules/@shower/ribbon/styles/styles.css">
+    <style>
+        .shower {
+            --slide-ratio: calc(16 / 9);
+        }
+    </style>
+</head>
+<body class="shower list">
+
+    <header class="caption">
+        <h1>RxJS</h1>
+        <p>Коротко и по существу</p>
+    </header>
+
+    <section class="slide">
+        <h2>RxJS - реализация Reactive Extensions API.</h2>
+        <p>ReactiveX - an API for asynchronous programming with observable streams</p>
+        <strong>ReactiveX = Iterator + Observer + FP</strong>
+        <img src="img/authors.png" class="place bottom right">
+    </section>
+
+    <section class="slide">
+        <h2>Реактивность - реакция на изменения</h2>
+        <img style="height: 70%;" class="place bottom" src="img/01.jpg">
+    </section>
+
+    <section class="slide">
+        <h2>Push/Pull</h2>
+        <p><b>Push</b> - сидите и ничего не делаете. Реагируете на сообщение.</p>
+        <p><b>Pull</b> - сами инициируете какое-то сообщение и работаете с результатом.</p>
+
+
+        <img style="height: 45%;" class="place bottom left" src="img/push.png">
+
+        <img style="width: 40%; bottom: 20px;" class="place bottom right" src="img/pull.jpg">
+    </section>
+
+    <section class="slide">
+        <h2>Поток</h2>
+        <p> Поток — это массив данных, распределённый времени, который может сообщать о том, что данные изменились.</p>
+        <p>В RxJS потоки реализуют паттерн Observable</p>
+        <img class="place bottom" style="bottom: 20px;" src="img/03.png">
+    </section>
+
+    <section class="slide">
+        <h2>Observable = Observer + Iterator</h2>
+        <p>Iterator - распределение во времени и тип данных не важен</p>
+        <p>Observer - push нотификация</p>
+        <img class="place bottom" style="height: 50%;" src="img/observable.jpg">
+
+    </section>
+
+    <section class="slide">
+        <h2>Характеристики потока</h2>
+        <ul>
+            <li>Lazy - пока нет подписки ничего не происходит</li>
+            <li>Холодный - буду получать все значения с самого начала</li>
+            <li>Горячий - буду получать значения с момента подписки</li>
+            <li>Конечный/Бесконечный</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Операторы. Их много.</h2>
+        <ul>
+            <li>Creation</li>
+            <li>Transformation</li>
+            <li>Filtering</li>
+            <li>Combination</li>
+            <li>Multicasting (cold -> hot)</li>
+            <li>Error Handling</li>
+            <li>Utility</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>from - создание</h2>
+        <pre>
+            <code>let numbers$ = from([10, 20, 30, 40, 50]);
+let observer = {
+    next: value => console.log(value),
+    error: err => console.log(`ERROR: ${err}`),
+    complete: () => console.log('All done.')
+};
+
+numbers$.subscribe(observer);
+            </code>
+        </pre>
+    </section>
+
+    <section class="slide">
+        <h2>.pipe</h2>
+        <img src="img/pipe.png" style="margin-top: 30px;" class="place">
+    </section>
+
+    <section class="slide">
+        <h2>map - отображение</h2>
+        <img src="img/map.png" style="max-width: 100%;">
+    </section>
+
+    <section class="slide">
+        <h2>filter - фильтрация</h2>
+        <img src="img/filter.png" style="max-width: 100%;">
+    </section>
+
+    <section class="slide">
+        <h2>tap - побочный эффект</h2>
+        <pre><code>const clicks = fromEvent(document, 'click');
+const positions = clicks.pipe(
+  tap(ev => console.log(ev)),
+  map(ev => ev.clientX),
+);
+positions.subscribe(x => console.log(x));
+        </code></pre>
+    </section>
+
+    <section class="slide">
+        <h2>takeUntil(notifier: Observable): Observable</h2>
+        <img src="img/takeUntil.png" class="place bottom" style="max-width: 100%; max-height: 70%;">
+    </section>
+
+    <section class="slide">
+        <h2>Обработка ошибок .catchError.</h2>
+        <p>Ставят в конце цепочки. <strong>Надо вернуть поток!</strong></p>
+        <pre><code>this.http.post(...)
+    .pipe(
+        takeUntil(this.ngUnsubscribe),
+        tap((res) => callback(false)),
+        catchError(error => EMPTY),
+    ).subscribe((res) => callback(true));
+</code></pre>
+    </section>
+
+    <section class="slide">
+        <h2>HOO: mergeMap = map + mergeAll</h2>
+        <p>Для работы с потоком потоков</p>
+        <pre><code>.pipe(
+    mergeMap((e) => {
+        const userName = e.target.value;
+        return ajax(`https://users.com/search?${userName}`);
+    })
+)</code></pre>
+        <img src="img/switch-map.jpeg" class="place right">
+    </section>
+
+    <section class="slide">
+        <h2>Subject.</h2>
+        <p><strong>Subject = Observable + Subscriber</strong></p>
+        <p>Бесконечная и горячая
+        Lazy push коллекция, в которую я могу сам добавлять данные.</p>
+        <pre><code>const subject = new Subject();
+subject.subscribe(msg => console.log(msg));
+subject.next('hi')
+        </code></pre>
+    </section>
+
+    <section class="slide">
+        <h2>Ресурсы</h2>
+        <ul>
+            <li><a href="https://rxjs.dev/">https://rxjs.dev/</a></li>
+            <li><a href="https://rxmarbles.com/">https://rxmarbles.com/</a></li>
+            <li><a href="https://www.learnrxjs.io/">https://www.learnrxjs.io/</a></li>
+        </ul>
+    </section>
+
+    <footer class="badge">
+        <a href="https://github.com/shower/shower">Fork me on GitHub</a>
+    </footer>
+
+    <div class="progress"></div>
+
+    <script src="node_modules/@shower/core/dist/shower.js"></script>
+    <!-- Copyright © 2021 Yours Truly, Famous Inc. -->
+
+</body>
+</html>

@@ -1,2 +1,2 @@
-# rxjs-briefly
-Доклад про RxJS
+# Доклад про RxJS
+
