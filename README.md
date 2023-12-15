@@ -1,4 +1,4 @@
-# Доклад про RxJS
+# Слайды про RxJS
 
 Слайды: [iegorov.github.io/rxjs-briefly](https://iegorov.github.io/rxjs-briefly/)
 
